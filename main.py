@@ -6,9 +6,16 @@ TOKEN = os.getenv("BOT_TOKEN")
 LINK = os.getenv("SHEIN_LINK")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(f"👋 أهلاً بك!\n\nاضغط على الرابط:\n{LINK}")
+    await update.message.reply_text(f"👋 أهلاً بك!\n\n{LINK}")
 
-app = Application.builder().token(TOKEN).build()
-app.add_handler(CommandHandler("start", start))
+def main():
+    if not TOKEN:
+        print("NO TOKEN FOUND")
+        return
 
-app.run_polling()
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
