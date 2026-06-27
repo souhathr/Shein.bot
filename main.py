@@ -1,26 +1,23 @@
 import os
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 TOKEN = os.getenv("BOT_TOKEN")
 LINK = os.getenv("SHEIN_LINK")
 
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("👋 أهلاً بك!\n\n" + str(LINK))
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("👋 أهلاً بك!\n\n" + str(LINK))
 
 def main():
     if not TOKEN:
         print("Missing BOT_TOKEN")
         return
 
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
 
-    dp.add_handler(CommandHandler("start", start))
-
-    print("Bot is running...")
-    updater.start_polling()
-    updater.idle()
+    print("Bot running...")
+    app.run_polling()
 
 if __name__ == "__main__":
     main()
